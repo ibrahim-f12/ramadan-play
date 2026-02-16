@@ -18,13 +18,11 @@ position:relative;
 
 h1{color:gold;margin-top:20px}
 
-/* ===== مقاسات الخلية (لا تعديل) ===== */
 :root{
 --w:85px;
 --h:85px;
 }
 
-/* موبايل */
 @media (max-width: 768px){
   :root{
     --w:55px;
@@ -32,7 +30,6 @@ h1{color:gold;margin-top:20px}
   }
 }
 
-/* ===== الشبكة ===== */
 #grid{
 display:flex;
 flex-direction:column;
@@ -76,7 +73,6 @@ transition:.2s;
 
 .hex:hover{transform:scale(1.08)}
 
-/* ===== شريط السؤال ===== */
 #questionBar{
 width:60%;
 margin:20px auto;
@@ -88,7 +84,6 @@ border-radius:20px;
 box-shadow:0 0 20px rgba(255,215,0,0.25);
 }
 
-/* ===== التايمر ===== */
 .timerBox{width:60%;margin:10px auto 20px}
 .timerText{font-size:26px;color:gold;margin-bottom:5px}
 .timerBar{
@@ -104,7 +99,6 @@ background:gold;
 transition:1s linear;
 }
 
-/* ===== حدود الفرق ===== */
 .boardWrapper{
 display:flex;
 flex-direction:column;
@@ -133,7 +127,6 @@ border-radius:20px;
 #leftEdge{margin-left:10px}
 #rightEdge{margin-right:10px}
 
-/* ===== الإجابات ===== */
 .gameArea{
   display:flex;
   justify-content:center;
@@ -142,7 +135,6 @@ border-radius:20px;
   direction:ltr;
 }
 
-/* موبايل */
 @media (max-width: 900px){
   .gameArea{
     flex-direction:column;
@@ -191,8 +183,8 @@ box-shadow:0 0 15px rgba(255,215,0,0.25);
   color:#fff;
   outline:none;
 
-  direction: rtl;      /* ⭐ الكتابة من اليمين */
-  text-align: right;   /* ⭐ بداية النص يمين */
+  direction: rtl;      
+  text-align: right;   
 
   box-shadow: 0 0 8px rgba(255,215,0,0.2);
 }
@@ -219,7 +211,6 @@ background:#ff3b3b;
 color:#fff;
 }
 
-/* ===== المساعدات ===== */
 .helps{margin-top:15px}
 .helps span{
 font-size:28px;
@@ -246,7 +237,7 @@ flex-direction:column;
 justify-content:center;
 align-items:center;
 background:radial-gradient(circle at top,#1a1445,#070a24);
-z-index:9999;   /* أهم سطر */
+z-index:9999; 
 background:
 radial-gradient(circle at center, rgba(255,215,0,0.18) 0%, rgba(255,215,0,0.08) 30%, transparent 80%),
 radial-gradient(circle at top,#1a1445,#070a24);
@@ -279,12 +270,10 @@ flex-direction:column;
 gap:10px;
 width:260px;
 
-/* ✨ التوهج */
 position:relative;
 transition:0.3s;
 }
 
-/* طبقة التوهج */
 .setupBox::after{
 content:"";
 position:absolute;
@@ -296,7 +285,6 @@ opacity:0;
 transition:0.4s;
 }
 
-/* عند اختيار اللون يظهر التوهج */
 .setupBox.glow::after{
 opacity:1;
 }
@@ -307,19 +295,14 @@ opacity:1;
   padding:14px 15px;
   font-size:20px;
   margin-top:12px;
-
-  /* الشكل الجديد */
-  background: rgba(255,255,255,0.08);   /* شفافية */
-  border:2px solid rgba(255,215,0,0.5); /* حد ذهبي خفيف */
+  background: rgba(255,255,255,0.08);   
+  border:2px solid rgba(255,215,0,0.5); 
   border-radius:14px;
   color:#fff;
   outline:none;
   backdrop-filter: blur(4px);
-
-  /* توهج خفيف */
   box-shadow: 0 0 10px rgba(255,215,0,0.25);
   transition:0.25s;
-
   direction: ltr;
   text-align: right;
 }
@@ -357,7 +340,6 @@ border:3px solid gold;
 transform:scale(1.15);
 }
 
-/* شاشة الفوز */
 #winScreen{
 position:fixed;
 top:0;
@@ -440,7 +422,6 @@ transform:translate(-50%,-50%) scale(1);
   box-shadow:0 0 20px gold;
 }
 
-/* طبقة النجوم */
 .stars{
   position:fixed;
   top:0;
@@ -452,7 +433,6 @@ transform:translate(-50%,-50%) scale(1);
   overflow:hidden;
 }
 
-/* النجوم */
 .stars::before,
 .stars::after{
   content:"";
@@ -468,27 +448,23 @@ transform:translate(-50%,-50%) scale(1);
   opacity:0.7;
 }
 
-/* طبقة نجوم ثانية أكبر */
 .stars::after{
   background-size: 200px 200px;
   opacity:0.9;
   animation-duration: 200s, 6s;
 }
 
-/* حركة النجوم */
 @keyframes starsMove{
   from{ transform:translateY(0); }
   to{ transform:translateY(-800px); }
 }
 
-/* لمعة النجوم */
 @keyframes twinkle{
   0%{opacity:0.3}
   50%{opacity:1}
   100%{opacity:0.3}
 }
 
-/* ===== الفوتر ===== */
 footer{
   width:100%;
   text-align:center;
@@ -588,7 +564,6 @@ display:none;
 
   <div class="answersArea">
 
-  <!-- الفريق الثاني (يمين / يسار) فوق -->
   <div class="teamBox">
     <h2 id="team2Title">الفريق الثاني</h2>
     <input id="answerBlue" placeholder="اكتب الإجابة">
@@ -601,7 +576,6 @@ display:none;
     </div>
   </div>
 
-  <!-- الفريق الأول (فوق / تحت) تحت -->
   <div class="teamBox">
     <h2 id="team1Title">الفريق الأول</h2>
     <input id="answerRed" placeholder="اكتب الإجابة">
@@ -617,7 +591,6 @@ display:none;
 </div>
 
  
-<!-- شاشة الفوز -->
 <div id="winScreen">
   <canvas id="confettiCanvas"></canvas>
 
@@ -627,22 +600,22 @@ display:none;
   </div>
 </div>
 
-  </div> <!-- نهاية answersArea -->
-</div> <!-- نهاية gameArea -->
-</div> <!-- نهاية gameScreen -->
+  </div> 
+</div> 
+</div> 
 
 <script>
     let team1Name = "الفريق الأول";
     let team2Name = "الفريق الثاني";
     const COLORS = [
-"#ff4d4d", // أحمر
-"#4da6ff", // أزرق
-"#33cc66", // أخضر
-"#ff9933", // برتقالي
-"#cc66ff", // بنفسجي
-"#ffe066", // أصفر
-"#00cccc", // تركواز
-"#ff66a3"  // وردي
+"#ff4d4d", 
+"#4da6ff",  
+"#33cc66",  
+"#ff9933", 
+"#cc66ff",  
+"#ffe066",  
+"#00cccc",  
+"#ff66a3"   
 ];
 
 let team1Color = COLORS[0];
@@ -660,11 +633,9 @@ function createColorBoxes(containerId, team){
       container.querySelectorAll(".colorBox").forEach(b=>b.classList.remove("selectedColor"));
       box.classList.add("selectedColor");
 
-      // تحديد لون الفريق
       if(team===1) team1Color=color;
       else team2Color=color;
 
-      // ✨ تشغيل التوهج على البوكس نفسه
       const setupBox = container.closest(".setupBox");
       setupBox.classList.add("glow");
       setupBox.style.setProperty("--glowColor", color);
@@ -676,35 +647,28 @@ function createColorBoxes(containerId, team){
   });
 }
 
-// إنشاء الألوان عند فتح الصفحة
-createColorBoxes("team1Colors",2); // هذا صار الفريق الثاني
-createColorBoxes("team2Colors",1); // هذا صار الفريق الأول
+createColorBoxes("team1Colors",2); 
+createColorBoxes("team2Colors",1);  
 
 function startGame(){
 
-  // لاحظ قلبناهم هنا 👇
   let teamTopBottomName = document.getElementById("team2NameInput").value || "الفريق الأول";
   let teamLeftRightName = document.getElementById("team1NameInput").value || "الفريق الثاني";
 
-  // ربط الأسماء بالمكان الصحيح في صفحة اللعب
-  document.getElementById("team1Title").innerText = teamTopBottomName; // هذا فريق فوق/تحت (السفلي)
-  document.getElementById("team2Title").innerText = teamLeftRightName; // هذا فريق يمين/يسار (العلوي)
-
+  document.getElementById("team1Title").innerText = teamTopBottomName; 
+  document.getElementById("team2Title").innerText = teamLeftRightName;  
   document.getElementById("team1Title").style.color = team1Color;
   document.getElementById("team2Title").style.color = team2Color;
 
-  // الفريق الأول = فوق تحت
   topEdge.style.background = team1Color;
   bottomEdge.style.background = team1Color;
 
-  // الفريق الثاني = يمين يسار
   leftEdge.style.background = team2Color;
   rightEdge.style.background = team2Color;
 
   document.getElementById("homeScreen").style.display="none";
 }
 
-// ===== الشبكة =====
 const letters=["ا","ب","ت","ث","ج","ح","خ","د","ر","ز","س","ش","ص","ض","ط","ع","غ","ف","ق","ك","ل","م","ن","ه","و"];
 let shuffled=[...letters].sort(()=>0.5-Math.random());
 let index=0;
@@ -718,7 +682,6 @@ for(let r=0;r<5;r++){
     hex.className="hex";
     hex.innerText=shuffled[index++];
 
-    // حفظ إحداثيات الخلية
     hex.dataset.row = r;
     hex.dataset.col = c;
 
@@ -727,11 +690,8 @@ for(let r=0;r<5;r++){
     grid.appendChild(row);
 }
 
-// مصفوفة ملكية الخلايا
 let boardState = Array(5).fill().map(()=>Array(5).fill(null));
 
-// ===== الأسئلة =====
-// بنك الأسئلة حسب الحروف
 const QUESTION_TYPES = [
 
 "مدينة سعودية",
@@ -808,7 +768,7 @@ const QUESTION_TYPES = [
 
 let selectedHex=null;
 let currentLetter="";
-let lastSelectedHex = null; // لتتبع آخر خلية مختارة
+let lastSelectedHex = null;  
 let currentTimer;
 let timePenaltyNextTurn=false;
 const answerRed = document.getElementById("answerRed");
@@ -819,7 +779,7 @@ function getRandomQuestion(letter){
   let type = QUESTION_TYPES[Math.floor(Math.random()*QUESTION_TYPES.length)];
   return type + " يبدأ بحرف " + letter;
 }
-// ===== التايمر =====
+
 function startTimer(){
     document.getElementById("startTimerBtn").style.display="none";
   let time=timePenaltyNextTurn?30:60;
@@ -843,26 +803,21 @@ function startTimer(){
   },1000);
 }
 
-// ===== اختيار خلية =====
 document.querySelectorAll(".hex").forEach(hex=>{
   hex.addEventListener("click",()=>{
 
-    // لا يسمح باختيار خلية مملوكة
     if(hex.style.background!=="") return;
 
-    // إزالة التحديد من الخلية السابقة
     if(lastSelectedHex){
       lastSelectedHex.classList.remove("selectedHex");
     }
 
-    // تحديد الخلية الجديدة
     selectedHex = hex;
     lastSelectedHex = hex;
     hex.classList.add("selectedHex");
 
     currentLetter = hex.innerText;
 
-    // توليد سؤال
     let questionText = getRandomQuestion(currentLetter);
     currentQuestionType = questionText;
 
@@ -879,8 +834,8 @@ function normalizeAnswer(text){
   return text
     .trim()
     .toLowerCase()
-    .replace(/^ال/, "")   // حذف ال التعريف بالبداية
-    .replace(/\s+/g,"");  // حذف المسافات
+    .replace(/^ال/, "")   
+    .replace(/\s+/g,"");  
 }
 
 function isValidWord(word, letter){
@@ -888,15 +843,9 @@ function isValidWord(word, letter){
 
   word = normalizeAnswer(word);
 
-  // لازم يبدأ بالحرف المطلوب
   if(!word.startsWith(letter)) return false;
-
-  // طول الكلمة لازم يكون 3 حروف أو أكثر
   if(word.length < 3) return false;
-
-  // لازم تكون حروف عربية فقط
   if(!/^[ء-ي]+$/.test(word)) return false;
-
   return true;
 }
 
@@ -921,17 +870,13 @@ function matchesQuestionCategory(word){
 
   for(let key in categories){
     if(currentQuestionType.includes(key)){
-      // لو السؤال فيه كلمة "مدينة" مثلا
       return true; 
-      // حاليا نكتفي بالتحقق اللغوي فقط لأن اللعبة جماعية
-      // الحكم النهائي يكون من الحكم البشري 👍
     }
   }
 
   return true;
 }
 
-// ===== الإجابة =====
 async function correctAnswer(team){
   if(!selectedHex) return alert("اختر خلية أولاً");
 
@@ -942,7 +887,6 @@ async function correctAnswer(team){
       return;
   }
 
-  // 🔥 هنا التلوين الصحيح حسب الفريق المختار من الواجهة
   selectedHex.style.background = (team === "team1") ? team1Color : team2Color;
 
   selectedHex.classList.remove("selectedHex");
@@ -956,7 +900,6 @@ async function correctAnswer(team){
   let r = selectedHex.dataset.row;
   let c = selectedHex.dataset.col;
 
-  // حفظ ملكية الخلية
   boardState[r][c] = team;
 
   checkWin();
@@ -968,26 +911,18 @@ async function correctAnswer(team){
   selectedHex = null;
 }
 
-// ===== المساعدات =====
 document.querySelectorAll(".helps span").forEach(help=>{
   help.onclick=()=>{
     if(help.classList.contains("usedHelp")) return;
-
     let icon=help.innerText;
-    // 📞 اتصال بصديق
     if(icon==="📞"){
         alert("اتصل بصديق")
 }
 
-   // ❌ حذف خلية المنافس
-if(icon==="❌"){
+    if(icon==="❌"){
+    let opponentTeam = help.parentElement.id==="helpsRed" ? "team2" : "team1";
+    let opponentCells = [];
 
-  // تحديد الفريق الذي سيتم حذف خلاياه
-  let opponentTeam = help.parentElement.id==="helpsRed" ? "team2" : "team1";
-
-  let opponentCells = [];
-
-  // البحث داخل boardState عن خلايا الخصم
   for(let r=0; r<5; r++){
     for(let c=0; c<5; c++){
       if(boardState[r][c] === opponentTeam){
@@ -996,19 +931,14 @@ if(icon==="❌"){
     }
   }
 
-  // إذا لا يوجد خلايا للخصم
   if(opponentCells.length === 0){
     alert("لا توجد خلايا للمنافس حالياً");
     return;
   }
 
-  // اختيار خلية عشوائية
   let randomPick = opponentCells[Math.floor(Math.random()*opponentCells.length)];
-
-  // إيجاد الخلية في الصفحة
   let hex = document.querySelector(`.hex[data-row='${randomPick.r}'][data-col='${randomPick.c}']`);
 
-  // حذفها من الصفحة ومن المصفوفة
   hex.style.background = "";
   hex.style.pointerEvents = "auto";
   boardState[randomPick.r][randomPick.c] = null;
@@ -1023,12 +953,10 @@ function rejectAnswer(){
 
   showResultIcon(false);
 
-  // إيقاف التايمر
   clearInterval(currentTimer);
   document.getElementById("startTimerBtn").style.display="none";
   document.getElementById("changeQuestionBtn").style.display="none";
 
-  // تفريغ الإجابات
   answerRed.value="";
   answerBlue.value="";
 
@@ -1044,25 +972,21 @@ function rejectAnswer(){
 
 function checkWin(){
 
-  // الفريق الأول (فوق ⇅ تحت)
   if(checkPath("team1")){
     endGame("🏆 فاز " + document.getElementById("team1Title").innerText);
   }
 
-  // الفريق الثاني (يمين ⇆ يسار)
   if(checkPath("team2")){
     endGame("🏆 فاز " + document.getElementById("team2Title").innerText);
   }
 
 }
 
-// BFS للبحث عن مسار متصل
 function checkPath(team){
 
   let visited = Array(5).fill().map(()=>Array(5).fill(false));
   let queue = [];
 
-  // ⭐ الفريق الأول (team1) لازم يوصل من فوق ➜ تحت
   if(team === "team1"){
     for(let c=0; c<5; c++){
       if(boardState[0][c] === team){
@@ -1072,7 +996,6 @@ function checkPath(team){
     }
   }
 
-  // ⭐ الفريق الثاني (team2) لازم يوصل من يسار ➜ يمين
   else{
     for(let r=0; r<5; r++){
       if(boardState[r][0] === team){
@@ -1089,9 +1012,8 @@ function checkPath(team){
   while(queue.length){
     let [r,c] = queue.shift();
 
-    // ⭐ تحقق الوصول للنهاية
-    if(team === "team1" && r === 4) return true; // وصل تحت
-    if(team === "team2" && c === 4) return true; // وصل يمين
+    if(team === "team1" && r === 4) return true; 
+    if(team === "team2" && c === 4) return true; 
 
     for(let [dr,dc] of dirs){
       let nr=r+dr, nc=c+dc;
@@ -1168,7 +1090,6 @@ async function isRealArabicWord(word){
 
   word = normalizeAnswer(word);
 
-  // الكاش
   if(dictionaryCache[word] !== undefined){
     return dictionaryCache[word];
   }
@@ -1185,7 +1106,6 @@ async function isRealArabicWord(word){
     }
 
   }catch{
-    // لو الانترنت فصل نعتبرها صحيحة عشان اللعبة ما توقف
     return true;
   }
 }
