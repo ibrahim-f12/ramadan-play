@@ -1,1145 +1,197 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لعبة رمضان</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600&display=swap" rel="stylesheet">
-
-<style>
-body{
-background:radial-gradient(circle at top,#1a1445,#070a24);
-font-family:'Cairo';
-text-align:center;
-color:#fff;
-overflow-x:hidden;
-position:relative;
-}
-
-h1{color:gold;margin-top:20px}
-
-:root{
---w:85px;
---h:85px;
-}
-
-@media (max-width: 768px){
-  :root{
-    --w:55px;
-    --h:55px;
-  }
-}
-
-#grid{
-display:flex;
-flex-direction:column;
-align-items:center;
-margin-top:-5px;
-margin-left:-15px;
-margin-right:25px;
-}
-
-.row{display:flex}
-
-.row:nth-child(even){
-margin-left: calc(var(--w)/2 + 50px);
-}
-
-.hex{
-width:var(--w);
-height:var(--h);
-background:#eee;
-color:#000;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:24px;
-font-weight:bold;
-cursor:pointer;
-
-clip-path:polygon(
-50% 0%,
-100% 25%,
-100% 75%,
-50% 100%,
-0% 75%,
-0% 25%
-);
-
-border:3px solid black;
-margin-bottom:-15px;
-transition:.2s;
-}
-
-.hex:hover{transform:scale(1.08)}
-
-#questionBar{
-width:60%;
-margin:20px auto;
-padding:15px;
-font-size:22px;
-background:#ffffff10;
-border:2px solid gold;
-border-radius:20px;
-box-shadow:0 0 20px rgba(255,215,0,0.25);
-}
-
-.timerBox{width:60%;margin:10px auto 20px}
-.timerText{font-size:26px;color:gold;margin-bottom:5px}
-.timerBar{
-height:16px;
-background:#333;
-border-radius:20px;
-overflow:hidden;
-}
-#timerFill{
-height:100%;
-width:100%;
-background:gold;
-transition:1s linear;
-}
-
-.boardWrapper{
-display:flex;
-flex-direction:column;
-align-items:center;
-margin-top:20px;
-}
-
-#topEdge,#bottomEdge{
-width:520px;
-height:14px;
-border-radius:20px;
-margin:20px 0;
-}
-
-.middleArea{
-display:flex;
-align-items:center;
-}
-
-#leftEdge,#rightEdge{
-width:14px;
-height:420px;
-border-radius:20px;
-}
-
-#leftEdge{margin-left:10px}
-#rightEdge{margin-right:10px}
-
-.gameArea{
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  gap:40px;
-  direction:ltr;
-}
-
-@media (max-width: 900px){
-  .gameArea{
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-  }
-
-  .answersArea{
-    order:2;
-    width:90%;
-  }
-
-  .boardWrapper{
-    order:1;
-    transform:scale(0.9);
-  }
-}
-
-.teamBox{
-width:260px;    
-background:#ffffff10;
-padding:20px;
-border-radius:20px;
-border:2px solid gold;
-box-shadow:0 0 15px rgba(255,215,0,0.25);
-}
-
-@media (max-width: 900px){
-  .teamBox{
-    width:90%;
-    max-width:400px;
-  }
-}
-
-.teamBox input{
-  width:100%;
-  box-sizing:border-box;
-
-  padding:12px 14px;
-  font-size:18px;
-  margin-top:10px;
-
-  border-radius:12px;
-  border:2px solid rgba(255,215,0,0.4);
-  background: rgba(255,255,255,0.08);
-  color:#fff;
-  outline:none;
-
-  direction: rtl;      
-  text-align: right;   
-
-  box-shadow: 0 0 8px rgba(255,215,0,0.2);
-}
-
-.teamBox input::placeholder{
-  text-align:right;
-}
-
-.teamBox button{
-padding:8px 15px;
-font-size:16px;
-cursor:pointer;
-margin-top:8px;
-border:none;
-border-radius:10px;
-}
-
-.teamBox button:first-of-type{
-background:gold;
-}
-
-.teamBox button:last-of-type{
-background:#ff3b3b;
-color:#fff;
-}
-
-.helps{margin-top:15px}
-.helps span{
-font-size:28px;
-margin:8px;
-cursor:pointer;
-transition:.2s;
-}
-.helps span:hover{transform:scale(1.2)}
-.usedHelp{
-text-decoration:line-through;
-color:red;
-opacity:.6;
-pointer-events:none;
-}
-
-#homeScreen{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-background:radial-gradient(circle at top,#1a1445,#070a24);
-z-index:9999; 
-background:
-radial-gradient(circle at center, rgba(255,215,0,0.18) 0%, rgba(255,215,0,0.08) 30%, transparent 80%),
-radial-gradient(circle at top,#1a1445,#070a24);
-}
-
-.startBtn{
-padding:15px 40px;
-font-size:26px;
-background:gold;
-border:none;
-border-radius:15px;
-cursor:pointer;
-margin-top:20px;
-}
-.startBtn:hover{transform:scale(1.1)}
-
-.teamSetup{
-display:flex;
-gap:60px;
-margin-top:30px;
-}
-
-.setupBox{
-background:#ffffff10;
-padding:20px;
-border-radius:20px;
-border:2px solid gold;
-display:flex;
-flex-direction:column;
-gap:10px;
-width:260px;
-
-position:relative;
-transition:0.3s;
-}
-
-.setupBox::after{
-content:"";
-position:absolute;
-inset:-4px;
-border-radius:22px;
-z-index:-1;
-filter:blur(18px);
-opacity:0;
-transition:0.4s;
-}
-
-.setupBox.glow::after{
-opacity:1;
-}
-
-.setupBox input{
-  width:100%;
-  box-sizing: border-box;
-  padding:14px 15px;
-  font-size:20px;
-  margin-top:12px;
-  background: rgba(255,255,255,0.08);   
-  border:2px solid rgba(255,215,0,0.5); 
-  border-radius:14px;
-  color:#fff;
-  outline:none;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 0 10px rgba(255,215,0,0.25);
-  transition:0.25s;
-  direction: ltr;
-  text-align: right;
-}
-
-.setupBox input:focus{
-  border-color: gold;
-  box-shadow: 
-    0 0 12px gold,
-    0 0 25px rgba(255,215,0,0.4);
-  background: rgba(255,255,255,0.12);
-}
-
-.setupBox input::placeholder{
-  text-align:right;
-}
-
-.colorGrid{
-display:grid;
-grid-template-columns:repeat(4,40px);
-gap:10px;
-justify-content:center;
-margin-top:10px;
-}
-
-.colorBox{
-width:40px;
-height:40px;
-border-radius:10px;
-cursor:pointer;
-border:3px solid transparent;
-}
-
-.selectedColor{
-border:3px solid gold;
-transform:scale(1.15);
-}
-
-#winScreen{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100vh;
-background:rgba(0,0,0,0.85);
-display:none;
-justify-content:center;
-align-items:center;
-z-index:99999;
-}
-
-.winBox{
-background:linear-gradient(135deg,#1a1445,#070a24);
-padding:50px 80px;
-border-radius:25px;
-border:3px solid gold;
-box-shadow:0 0 40px rgba(255,215,0,0.4);
-animation:pop 0.6s ease;
-}
-
-@media (max-width:600px){
-  .winBox{
-    padding:35px 20px;
-  }
-
-  .winBox h1{
-    font-size:32px;
-  }
-}
-
-.winBox h1{
-font-size:48px;
-margin-bottom:30px;
-}
-
-.winBox button{
-padding:15px 35px;
-font-size:22px;
-background:gold;
-border:none;
-border-radius:15px;
-cursor:pointer;
-}
-
-@keyframes pop{
-from{transform:scale(0.5);opacity:0}
-to{transform:scale(1);opacity:1}
-}
-
-#confettiCanvas{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-pointer-events:none;
-}
-
-#resultIcon{
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%) scale(0);
-font-size:220px;
-z-index:99999;
-pointer-events:none;
-transition:0.3s;
-}
-
-.showIcon{
-transform:translate(-50%,-50%) scale(1);
-}
-
-.correct{ color:#00ff88; text-shadow:0 0 40px #00ff88;}
-.wrong{ color:#ff3b3b; text-shadow:0 0 40px #ff3b3b;}
-.selectedHex{
-  background:#fff3a0 !important;
-  box-shadow:0 0 20px gold;
-}
-
-.stars{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  z-index:0;
-  overflow:hidden;
-}
-
-.stars::before,
-.stars::after{
-  content:"";
-  position:absolute;
-  top:0;
-  left:0;
-  width:200%;
-  height:200%;
-  background-image:
-    radial-gradient(white 1px, transparent 1px);
-  background-size: 150px 150px;
-  animation: starsMove 120s linear infinite, twinkle 4s ease-in-out infinite;
-  opacity:0.7;
-}
-
-.stars::after{
-  background-size: 200px 200px;
-  opacity:0.9;
-  animation-duration: 200s, 6s;
-}
-
-@keyframes starsMove{
-  from{ transform:translateY(0); }
-  to{ transform:translateY(-800px); }
-}
-
-@keyframes twinkle{
-  0%{opacity:0.3}
-  50%{opacity:1}
-  100%{opacity:0.3}
-}
-
-footer{
-  width:100%;
-  text-align:center;
-  padding:15px;
-  margin-top:30px;
-  font-size:14px;
-  color:#ffffffaa;
-  border-top:1px solid rgba(255,255,255,0.15);
-  letter-spacing:1px;
-}
-
-footer span{
-  color:gold;
-  font-weight:bold;
-}
-
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حروف رمضانية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-    
-<div id="homeScreen">
+  <div id="homeScreen">
     <div class="stars"></div>
+    <h1 class="mainTitle">🌙 حروف رمضانية</h1>
 
-    <h1 style="font-size:50px">🌙 رمضانيات</h1>
+    <section id="setupPage1" class="setupPage active">
+      <div class="teamSetup">
+        <div class="setupBox" id="setupTeam1">
+          <h2>الفريق الأول</h2>
+          <input id="team1NameInput" placeholder="اسم الفريق" />
+          <div class="colorGrid" id="team1Colors"></div>
+        </div>
 
-    <div class="teamSetup">
+        <div class="setupBox" id="setupTeam2">
+          <h2>الفريق الثاني</h2>
+          <input id="team2NameInput" placeholder="اسم الفريق" />
+          <div class="colorGrid" id="team2Colors"></div>
+        </div>
+      </div>
 
-        <div class="setupBox">
-         <h2>الفريق الثاني</h2>
-         <input id="team1NameInput" placeholder="اسم الفريق">
+      <div class="rulesPanel">
+        <article class="ruleCard">
+          <h3 class="ruleTitle">تعليمات اللعبة</h3>
+          <p class="ruleBody">
+            كل فريق يختار اسمًا ولونًا مختلفًا. بعد الإعداد يتم اختيار مستوى الصعوبة وتصنيف الأسئلة، ثم بداية اللعب تكون إما باختيار كل فريق لحرفه مع اختيار فريق البداية عشوائيًا، أو بقرعة حرف بداية عشوائي. يظهر السؤال بعد اختيار الحرف، ويجب أن تبدأ الإجابة بنفس الحرف المختار. الفريق الذي يجيب صحيحًا يأخذ أولوية اختيار الحرف التالي.
+          </p>
+        </article>
 
-        <div class="colorGrid" id="team1Colors"></div>
-   </div>
+        <article class="ruleCard">
+          <h3 class="ruleTitle">المساعدات</h3>
+          <p class="ruleBody">
+            لكل فريق مساعدتان تستخدم مرة واحدة لكل مساعدة: حذف خلية من خلايا الفريق المنافس، واتصال بصديق للحصول على تلميح.
+          </p>
+        </article>
 
-        <div class="setupBox">
-         <h2>الفريق الأول</h2>
-         <input id="team2NameInput" placeholder="اسم الفريق">
+        <article class="ruleCard">
+          <h3 class="ruleTitle">طريقة الفوز</h3>
+          <p class="ruleBody">
+            أول فريق يصل بخط لونه إلى الجهة المقابلة له يفوز بالمباراة.
+          </p>
+        </article>
+      </div>
 
-        <div class="colorGrid" id="team2Colors"></div>
-     </div>
+      <button id="goToOptionsBtn" class="startBtn">التالي: إعدادات اللعب</button>
+    </section>
 
-    </div>
+    <section id="setupPage2" class="setupPage">
+      <h2 class="setupSubTitle">إعدادات الجولة</h2>
 
-    <button onclick="startGame()" class="startBtn">ابدأ اللعبة</button>
+      <div class="settingsGrid">
+        <div class="settingCard">
+          <h3>مستوى الصعوبة</h3>
+          <div class="choiceGroup" id="difficultyChoices">
+            <button class="choiceBtn selectedChoice" data-value="easy">سهل</button>
+            <button class="choiceBtn" data-value="strict">صارم</button>
+          </div>
+        </div>
+
+        <div class="settingCard">
+          <h3>تصنيف الأسئلة</h3>
+          <div class="choiceGroup" id="categoryChoices">
+            <button class="choiceBtn" data-value="religious">دينية</button>
+            <button class="choiceBtn" data-value="geography">جغرافية</button>
+            <button class="choiceBtn" data-value="sports">رياضية</button>
+            <button class="choiceBtn" data-value="puzzles">ألغاز</button>
+            <button class="choiceBtn" data-value="proverbs">أمثال</button>
+            <button class="choiceBtn selectedChoice" data-value="cocktail">كوكتيل</button>
+          </div>
+        </div>
+
+        <div class="settingCard">
+          <h3>مدة المؤقت</h3>
+          <div class="choiceGroup" id="timerChoices">
+            <button class="choiceBtn" data-value="15">15 ثانية</button>
+            <button class="choiceBtn" data-value="20">20 ثانية</button>
+            <button class="choiceBtn selectedChoice" data-value="30">30 ثانية</button>
+            <button class="choiceBtn" data-value="45">45 ثانية</button>
+            <button class="choiceBtn" data-value="60">60 ثانية</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settingCard startModeCard">
+        <h3>بداية اللعب</h3>
+        <div class="choiceGroup" id="startModeChoices">
+          <button class="choiceBtn" data-value="lottery">قرعة حرف البداية</button>
+          <button class="choiceBtn selectedChoice" data-value="letters">كل فريق يختار حرفًا</button>
+        </div>
+        <p id="startModeHint" class="choiceHint">كل فريق يختار حرفًا، ثم يتم اختيار فريق البداية عشوائيًا ويبدأ بحرفه.</p>
+      </div>
+
+      <div id="lettersStartBox" class="lettersStartBox">
+        <div class="teamLetterPicker">
+          <h4 id="team1StartLabel">حرف بداية الفريق الأول</h4>
+          <div class="letterChoices" id="team1StartLetters"></div>
+        </div>
+
+        <div class="teamLetterPicker">
+          <h4 id="team2StartLabel">حرف بداية الفريق الثاني</h4>
+          <div class="letterChoices" id="team2StartLetters"></div>
+        </div>
+      </div>
+
+      <div class="setupActions">
+        <button id="backToTeamsBtn" class="controlBtn blue">رجوع</button>
+        <button id="startGameBtn" class="startBtn">ابدأ اللعبة</button>
+      </div>
+    </section>
+
     <footer>
-  جميع الحقوق محفوظة © <span>Ibrahim Mohammad</span> 2026
+      جميع الحقوق محفوظة © <span>Ibrahim Mohammad</span> 2026
     </footer>
-</div>
-<div id="resultIcon"></div>
-
-<div id="gameScreen">
-
-<h1>🌙 رمضانيات</h1>
-
-<div id="questionBar">اضغط أي خلية لبدء السؤال</div>
-<button id="startTimerBtn" onclick="startTimer()" style="
-padding:10px 25px;
-font-size:18px;
-background:gold;
-border:none;
-border-radius:10px;
-cursor:pointer;
-margin-bottom:10px;
-display:none;
-">ابدأ الوقت </button>
-
-<button id="changeQuestionBtn" onclick="changeQuestion()" style="
-padding:10px 25px;
-font-size:18px;
-background:#00c3ff;
-border:none;
-border-radius:10px;
-cursor:pointer;
-margin-bottom:10px;
-display:none;
-">تبديل</button>
-
-<div class="timerBox">
-  <div class="timerText" id="timerText">60</div>
-  <div class="timerBar">
-      <div id="timerFill"></div>
   </div>
-</div>
 
-<div class="gameArea">
+  <div id="resultIcon"></div>
 
-  <div class="boardWrapper">
-    <div id="topEdge"></div>
-    <div class="middleArea">
-        <div id="leftEdge"></div>
-        <div id="grid"></div>
-        <div id="rightEdge"></div>
+  <div id="gameScreen">
+    <h1>🌙 حروف رمضانية</h1>
+
+    <div class="gameMeta">
+      <div id="turnBadge">أولوية اختيار الحرف: --</div>
+      <div id="timerLabel">مدة الجولة: <span id="timerDurationLabel">30</span> ثانية</div>
+      <button id="changeQuestionBtn" class="controlBtn cyan">تبديل السؤال</button>
     </div>
-    <div id="bottomEdge"></div>
-  </div>
 
-  <div class="answersArea">
+    <div id="questionBar">اختر خلية لبدء السؤال</div>
 
-  <div class="teamBox">
-    <h2 id="team2Title">الفريق الثاني</h2>
-    <input id="answerBlue" placeholder="اكتب الإجابة">
-    <button onclick="correctAnswer('team2')">إجابة صحيحة</button>
-    <button onclick="rejectAnswer()">رفض الإجابة</button>
+    <div class="timerBox">
+      <div class="timerText" id="timerText">30</div>
+      <div class="timerBar">
+        <div id="timerFill"></div>
+      </div>
+      <div class="timerActions">
+        <button id="pauseTimerBtn" class="controlBtn blue">إيقاف المؤقت</button>
+        <button id="resetTimerBtn" class="controlBtn red">إعادة المؤقت</button>
+      </div>
+    </div>
 
-    <div class="helps" id="helpsBlue">
-      <span title="اتصال بصديق">📞</span>
-      <span title="حذف خلية منافس">❌</span>
+    <div class="gameArea">
+      <div class="boardWrapper">
+        <div id="topEdge"></div>
+        <div class="middleArea">
+          <div id="leftEdge"></div>
+          <div id="grid"></div>
+          <div id="rightEdge"></div>
+        </div>
+        <div id="bottomEdge"></div>
+      </div>
+
+      <div class="answersArea">
+        <div class="teamBox" id="team1Box">
+          <h2 id="team1Title">الفريق الأول</h2>
+          <input id="answerTeam1" placeholder="إجابة الفريق الأول" />
+          <button class="verifyBtn" data-team="team1">تحقق من الإجابة</button>
+          <div class="helps" id="helpsTeam1">
+            <button type="button" class="helpBtn" data-help="call" title="اتصال بصديق">📞 اتصال بصديق</button>
+            <button type="button" class="helpBtn" data-help="delete" title="حذف خلية المنافس">❌ حذف خلية</button>
+          </div>
+        </div>
+
+        <div class="teamBox" id="team2Box">
+          <h2 id="team2Title">الفريق الثاني</h2>
+          <input id="answerTeam2" placeholder="إجابة الفريق الثاني" />
+          <button class="verifyBtn" data-team="team2">تحقق من الإجابة</button>
+          <div class="helps" id="helpsTeam2">
+            <button type="button" class="helpBtn" data-help="call" title="اتصال بصديق">📞 اتصال بصديق</button>
+            <button type="button" class="helpBtn" data-help="delete" title="حذف خلية المنافس">❌ حذف خلية</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="teamBox">
-    <h2 id="team1Title">الفريق الأول</h2>
-    <input id="answerRed" placeholder="اكتب الإجابة">
-    <button onclick="correctAnswer('team1')">إجابة صحيحة</button>
-    <button onclick="rejectAnswer()">رفض الإجابة</button>
-
-    <div class="helps" id="helpsRed">
-      <span title="اتصال بصديق">📞</span>
-      <span title="حذف خلية منافس">❌</span>
+  <div id="winScreen">
+    <canvas id="confettiCanvas"></canvas>
+    <div class="winBox">
+      <h1 id="winTitle">🏆 فاز الفريق</h1>
+      <button id="restartBtn">إعادة اللعب</button>
     </div>
   </div>
 
-</div>
-
- 
-<div id="winScreen">
-  <canvas id="confettiCanvas"></canvas>
-
-  <div class="winBox">
-    <h1 id="winTitle">🏆 فاز الفريق</h1>
-    <button onclick="restartGame()">إعادة اللعب</button>
-  </div>
-</div>
-
-  </div> 
-</div> 
-</div> 
-
-<script>
-    let team1Name = "الفريق الأول";
-    let team2Name = "الفريق الثاني";
-    const COLORS = [
-"#ff4d4d", 
-"#4da6ff",  
-"#33cc66",  
-"#ff9933", 
-"#cc66ff",  
-"#ffe066",  
-"#00cccc",  
-"#ff66a3"   
-];
-
-let team1Color = COLORS[0];
-let team2Color = COLORS[1];
-
-function createColorBoxes(containerId, team){
-  const container = document.getElementById(containerId);
-
-  COLORS.forEach(color=>{
-    let box = document.createElement("div");
-    box.className="colorBox";
-    box.style.background=color;
-
-    box.onclick=()=>{
-      container.querySelectorAll(".colorBox").forEach(b=>b.classList.remove("selectedColor"));
-      box.classList.add("selectedColor");
-
-      if(team===1) team1Color=color;
-      else team2Color=color;
-
-      const setupBox = container.closest(".setupBox");
-      setupBox.classList.add("glow");
-      setupBox.style.setProperty("--glowColor", color);
-      setupBox.style.boxShadow = `0 0 25px ${color}, 0 0 45px ${color}`;
-      setupBox.style.borderColor = color;
-    };
-
-    container.appendChild(box);
-  });
-}
-
-createColorBoxes("team1Colors",2); 
-createColorBoxes("team2Colors",1);  
-
-function startGame(){
-
-  let teamTopBottomName = document.getElementById("team2NameInput").value || "الفريق الأول";
-  let teamLeftRightName = document.getElementById("team1NameInput").value || "الفريق الثاني";
-
-  document.getElementById("team1Title").innerText = teamTopBottomName; 
-  document.getElementById("team2Title").innerText = teamLeftRightName;  
-  document.getElementById("team1Title").style.color = team1Color;
-  document.getElementById("team2Title").style.color = team2Color;
-
-  topEdge.style.background = team1Color;
-  bottomEdge.style.background = team1Color;
-
-  leftEdge.style.background = team2Color;
-  rightEdge.style.background = team2Color;
-
-  document.getElementById("homeScreen").style.display="none";
-}
-
-const letters=["ا","ب","ت","ث","ج","ح","خ","د","ر","ز","س","ش","ص","ض","ط","ع","غ","ف","ق","ك","ل","م","ن","ه","و"];
-let shuffled=[...letters].sort(()=>0.5-Math.random());
-let index=0;
-const grid=document.getElementById("grid");
-
-for(let r=0;r<5;r++){
-  let row=document.createElement("div");
-  row.className="row";
-  for(let c=0;c<5;c++){
-    let hex=document.createElement("div");
-    hex.className="hex";
-    hex.innerText=shuffled[index++];
-
-    hex.dataset.row = r;
-    hex.dataset.col = c;
-
-    row.appendChild(hex);
-    }
-    grid.appendChild(row);
-}
-
-let boardState = Array(5).fill().map(()=>Array(5).fill(null));
-
-const QUESTION_TYPES = [
-
-"مدينة سعودية",
-"مدينة عربية",
-"مدينة عالمية",
-"دولة عربية",
-"دولة أوروبية",
-"دولة آسيوية",
-"عاصمة دولة",
-"حيوان",
-"حيوان بحري",
-"طائر",
-"حشرة",
-"نبات",
-"فاكهة",
-"خضار",
-"أكلة عربية",
-"أكلة شعبية",
-"حلوى",
-"مشروب",
-"مهنة",
-"مهنة طبية",
-"وظيفة",
-"اسم ولد",
-"اسم بنت",
-"اسم صحابي",
-"اسم نبي",
-"فريق سعودي",
-"نادي عالمي",
-"لاعب كرة قدم",
-"رياضة",
-"صفة إيجابية",
-"صفة سلبية",
-"مرادف كلمة جميل",
-"مرادف كلمة قوي",
-"مرادف كلمة سريع",
-"مرادف كلمة كبير",
-"مرادف كلمة صغير",
-"شيء في المنزل",
-"شيء في المطبخ",
-"شيء في المدرسة",
-"شيء في السيارة",
-"وسيلة نقل",
-"أداة كهربائية",
-"جهاز إلكتروني",
-"مادة دراسية",
-"علم من العلوم",
-"كوكب",
-"بحر",
-"نهر",
-"جبل",
-"لغة",
-"عملة",
-"لباس",
-"لعبة",
-"برنامج تلفزيوني",
-"فيلم",
-"كرتون",
-"أداة رياضية",
-"ماركة عالمية",
-"شركة تقنية",
-"مرض",
-"دواء",
-"عنصر كيميائي",
-"مخترع",
-"عالم مشهور",
-"مدينة سياحية",
-"مكان تاريخي",
-"مكان ديني",
-"مهنة في الجيش",
-"مهنة تعليمية",
-"مهنة هندسية"
-];
-
-let selectedHex=null;
-let currentLetter="";
-let lastSelectedHex = null;  
-let currentTimer;
-let timePenaltyNextTurn=false;
-const answerRed = document.getElementById("answerRed");
-const answerBlue = document.getElementById("answerBlue");
-
-
-function getRandomQuestion(letter){
-  let type = QUESTION_TYPES[Math.floor(Math.random()*QUESTION_TYPES.length)];
-  return type + " يبدأ بحرف " + letter;
-}
-
-function startTimer(){
-    document.getElementById("startTimerBtn").style.display="none";
-  let time=timePenaltyNextTurn?30:60;
-  timePenaltyNextTurn=false;
-
-  const bar = document.getElementById("timerFill");
-  const text = document.getElementById("timerText");
-
-  clearInterval(currentTimer);
-  bar.style.width="100%";
-  text.innerText=time;
-
-  currentTimer=setInterval(()=>{
-    time--;
-    bar.style.width=(time/(time<=30?30:60)*100)+"%";
-    text.innerText=time;
-    if(time<=0){
-      clearInterval(currentTimer);
-      document.getElementById("questionBar").innerText="انتهى الوقت ⏰";
-    }
-  },1000);
-}
-
-document.querySelectorAll(".hex").forEach(hex=>{
-  hex.addEventListener("click",()=>{
-
-    if(hex.style.background!=="") return;
-
-    if(lastSelectedHex){
-      lastSelectedHex.classList.remove("selectedHex");
-    }
-
-    selectedHex = hex;
-    lastSelectedHex = hex;
-    hex.classList.add("selectedHex");
-
-    currentLetter = hex.innerText;
-
-    let questionText = getRandomQuestion(currentLetter);
-    currentQuestionType = questionText;
-
-    document.getElementById("questionBar").innerText =
-      "الحرف: " + currentLetter + " — " + questionText;
-
-    document.getElementById("startTimerBtn").style.display="inline-block";
-    document.getElementById("changeQuestionBtn").style.display="inline-block";
-  });
-});
-let currentQuestionType = "";
-let dictionaryCache = {};
-function normalizeAnswer(text){
-  return text
-    .trim()
-    .toLowerCase()
-    .replace(/^ال/, "")   
-    .replace(/\s+/g,"");  
-}
-
-function isValidWord(word, letter){
-  if(!word) return false;
-
-  word = normalizeAnswer(word);
-
-  if(!word.startsWith(letter)) return false;
-  if(word.length < 3) return false;
-  if(!/^[ء-ي]+$/.test(word)) return false;
-  return true;
-}
-
-function matchesQuestionCategory(word){
-  const categories = {
-    "مدينة":["مدينة","عاصمة"],
-    "دولة":["دولة"],
-    "حيوان":["حيوان"],
-    "نبات":["نبات"],
-    "فاكهة":["فاكهة"],
-    "طائر":["طائر"],
-    "مهنة":["مهنة"],
-    "اسم":["اسم"],
-    "أكلة":["أكلة"],
-    "رياضة":["رياضة"],
-    "فريق":["فريق"],
-    "صحابي":["صحابي"],
-    "نبي":["نبي"],
-    "وسيلة نقل":["وسيلة نقل"],
-    "جماد":["جماد"]
-  };
-
-  for(let key in categories){
-    if(currentQuestionType.includes(key)){
-      return true; 
-    }
-  }
-
-  return true;
-}
-
-async function correctAnswer(team){
-  if(!selectedHex) return alert("اختر خلية أولاً");
-
-  let input = team==="team1" ? answerRed.value.trim() : answerBlue.value.trim();
-
-  if(!isValidWord(input, currentLetter)){
-      showResultIcon(false);
-      return;
-  }
-
-  selectedHex.style.background = (team === "team1") ? team1Color : team2Color;
-
-  selectedHex.classList.remove("selectedHex");
-  lastSelectedHex = null;
-
-  showResultIcon(true);
-  clearInterval(currentTimer);
-  document.getElementById("startTimerBtn").style.display="none";
-  document.getElementById("changeQuestionBtn").style.display="none";
-
-  let r = selectedHex.dataset.row;
-  let c = selectedHex.dataset.col;
-
-  boardState[r][c] = team;
-
-  checkWin();
-
-  selectedHex.style.pointerEvents="none";
-  answerRed.value=""; 
-  answerBlue.value="";
-  document.getElementById("questionBar").innerText="اختر خلية جديدة 🎉";
-  selectedHex = null;
-}
-
-document.querySelectorAll(".helps span").forEach(help=>{
-  help.onclick=()=>{
-    if(help.classList.contains("usedHelp")) return;
-    let icon=help.innerText;
-    if(icon==="📞"){
-        alert("اتصل بصديق")
-}
-
-    if(icon==="❌"){
-    let opponentTeam = help.parentElement.id==="helpsRed" ? "team2" : "team1";
-    let opponentCells = [];
-
-  for(let r=0; r<5; r++){
-    for(let c=0; c<5; c++){
-      if(boardState[r][c] === opponentTeam){
-        opponentCells.push({r,c});
-      }
-    }
-  }
-
-  if(opponentCells.length === 0){
-    alert("لا توجد خلايا للمنافس حالياً");
-    return;
-  }
-
-  let randomPick = opponentCells[Math.floor(Math.random()*opponentCells.length)];
-  let hex = document.querySelector(`.hex[data-row='${randomPick.r}'][data-col='${randomPick.c}']`);
-
-  hex.style.background = "";
-  hex.style.pointerEvents = "auto";
-  boardState[randomPick.r][randomPick.c] = null;
-}
-
-help.classList.add("usedHelp");
- };
-});
-
-function rejectAnswer(){
-  if(!selectedHex) return;
-
-  showResultIcon(false);
-
-  clearInterval(currentTimer);
-  document.getElementById("startTimerBtn").style.display="none";
-  document.getElementById("changeQuestionBtn").style.display="none";
-
-  answerRed.value="";
-  answerBlue.value="";
-
-  document.getElementById("questionBar").innerText="تم رفض الإجابة ❌ اختر خلية جديدة";
-
-  if(lastSelectedHex){
-  lastSelectedHex.classList.remove("selectedHex");
-  lastSelectedHex = null;
-  }
-
-  selectedHex=null;
-}
-
-function checkWin(){
-
-  if(checkPath("team1")){
-    endGame("🏆 فاز " + document.getElementById("team1Title").innerText);
-  }
-
-  if(checkPath("team2")){
-    endGame("🏆 فاز " + document.getElementById("team2Title").innerText);
-  }
-
-}
-
-function checkPath(team){
-
-  let visited = Array(5).fill().map(()=>Array(5).fill(false));
-  let queue = [];
-
-  if(team === "team1"){
-    for(let c=0; c<5; c++){
-      if(boardState[0][c] === team){
-        queue.push([0,c]);
-        visited[0][c] = true;
-      }
-    }
-  }
-
-  else{
-    for(let r=0; r<5; r++){
-      if(boardState[r][0] === team){
-        queue.push([r,0]);
-        visited[r][0] = true;
-      }
-    }
-  }
-
-  const dirs = [
-    [1,0],[-1,0],[0,1],[0,-1],[1,-1],[-1,1]
-  ];
-
-  while(queue.length){
-    let [r,c] = queue.shift();
-
-    if(team === "team1" && r === 4) return true; 
-    if(team === "team2" && c === 4) return true; 
-
-    for(let [dr,dc] of dirs){
-      let nr=r+dr, nc=c+dc;
-
-      if(
-        nr>=0 && nr<5 &&
-        nc>=0 && nc<5 &&
-        !visited[nr][nc] &&
-        boardState[nr][nc]===team
-      ){
-        visited[nr][nc]=true;
-        queue.push([nr,nc]);
-      }
-    }
-  }
-
-  return false;
-}
-
-function endGame(msg){
-  document.getElementById("winScreen").style.display="flex";
-  document.getElementById("winTitle").innerText = msg;
-  startConfetti();
-}
-function restartGame(){
-  location.reload();
-}
-
-let confettiPieces=[];
-let confettiRunning=false;
-
-function startConfetti(){
-  const canvas=document.getElementById("confettiCanvas");
-  const ctx=canvas.getContext("2d");
-
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-
-  confettiPieces=[];
-  for(let i=0;i<150;i++){
-    confettiPieces.push({
-      x:Math.random()*canvas.width,
-      y:Math.random()*canvas.height-500,
-      size:Math.random()*8+4,
-      speed:Math.random()*3+2,
-      angle:Math.random()*360
-    });
-  }
-
-  confettiRunning=true;
-
-  function animate(){
-    if(!confettiRunning) return;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    confettiPieces.forEach(p=>{
-      ctx.fillStyle=`hsl(${Math.random()*360},100%,60%)`;
-      ctx.fillRect(p.x,p.y,p.size,p.size);
-
-      p.y+=p.speed;
-      p.x+=Math.sin(p.angle);
-      p.angle+=0.05;
-
-      if(p.y>canvas.height) p.y=-10;
-    });
-
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-}
-
-async function isRealArabicWord(word){
-
-  word = normalizeAnswer(word);
-
-  if(dictionaryCache[word] !== undefined){
-    return dictionaryCache[word];
-  }
-
-  try{
-    const res = await fetch("https://api.dictionaryapi.dev/api/v2/entries/ar/" + word);
-    
-    if(res.status === 200){
-      dictionaryCache[word] = true;
-      return true;
-    }else{
-      dictionaryCache[word] = false;
-      return false;
-    }
-
-  }catch{
-    return true;
-  }
-}
-
-function showResultIcon(isCorrect){
-  const icon=document.getElementById("resultIcon");
-
-  if(isCorrect){
-    icon.innerHTML="✔";
-    icon.className="showIcon correct";
-  }else{
-    icon.innerHTML="✖";
-    icon.className="showIcon wrong";
-  }
-
-  setTimeout(()=>{
-    icon.className="";
-  },1200);
-}
-
-function changeQuestion(){
-  if(!selectedHex) return;
-
-  let newQuestion = getRandomQuestion(currentLetter);
-  currentQuestionType = newQuestion;
-
-  document.getElementById("questionBar").innerText =
-    "الحرف: " + currentLetter + " — " + newQuestion;
-}
-</script>
-
-<footer>
-  جميع الحقوق محفوظة © <span>Ibrahim Mohammad</span> 2026
-</footer>
-
+  <footer class="gameFooter">
+    جميع الحقوق محفوظة © <span>Ibrahim Mohammad</span> 2026
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
