@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>حروف رمضانية</title>
+  <title>حروف رمضان</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div id="homeScreen">
     <div class="stars"></div>
-    <h1 class="mainTitle">🌙 حروف رمضانية</h1>
+    <h1 class="mainTitle">حروف رمضان 🌙</h1>
 
     <section id="setupPage1" class="setupPage active">
       <div class="teamSetup">
@@ -56,26 +56,8 @@
     <section id="setupPage2" class="setupPage">
       <h2 class="setupSubTitle">إعدادات الجولة</h2>
 
-      <div class="settingsGrid">
-        <div class="settingCard">
-          <h3>مستوى الصعوبة</h3>
-          <div class="choiceGroup" id="difficultyChoices">
-            <button class="choiceBtn selectedChoice" data-value="easy">سهل</button>
-            <button class="choiceBtn" data-value="strict">صارم</button>
-          </div>
-        </div>
 
-        <div class="settingCard">
-          <h3>تصنيف الأسئلة</h3>
-          <div class="choiceGroup" id="categoryChoices">
-            <button class="choiceBtn" data-value="religious">دينية</button>
-            <button class="choiceBtn" data-value="geography">جغرافية</button>
-            <button class="choiceBtn" data-value="sports">رياضية</button>
-            <button class="choiceBtn" data-value="puzzles">ألغاز</button>
-            <button class="choiceBtn" data-value="proverbs">أمثال</button>
-            <button class="choiceBtn selectedChoice" data-value="cocktail">كوكتيل</button>
-          </div>
-        </div>
+      <div class="settingsGrid">
 
         <div class="settingCard">
           <h3>مدة المؤقت</h3>
@@ -87,16 +69,17 @@
             <button class="choiceBtn" data-value="60">60 ثانية</button>
           </div>
         </div>
+          <div class="settingCard startModeCard">
+            <h3>بداية اللعب</h3>
+            <div class="choiceGroup" id="startModeChoices">
+              <button class="choiceBtn" data-value="lottery">قرعة حرف البداية</button>
+              <button class="choiceBtn selectedChoice" data-value="letters">كل فريق يختار حرفًا</button>
+            </div>
+            <p id="startModeHint" class="choiceHint">كل فريق يختار حرفًا، ثم يتم اختيار فريق البداية عشوائيًا ويبدأ بحرفه.</p>
+         </div>
       </div>
+      
 
-      <div class="settingCard startModeCard">
-        <h3>بداية اللعب</h3>
-        <div class="choiceGroup" id="startModeChoices">
-          <button class="choiceBtn" data-value="lottery">قرعة حرف البداية</button>
-          <button class="choiceBtn selectedChoice" data-value="letters">كل فريق يختار حرفًا</button>
-        </div>
-        <p id="startModeHint" class="choiceHint">كل فريق يختار حرفًا، ثم يتم اختيار فريق البداية عشوائيًا ويبدأ بحرفه.</p>
-      </div>
 
       <div id="lettersStartBox" class="lettersStartBox">
         <div class="teamLetterPicker">
@@ -124,8 +107,7 @@
   <div id="resultIcon"></div>
 
   <div id="gameScreen">
-    <h1>🌙 حروف رمضانية</h1>
-
+    <h1>حروف🌙 رمضان </h1>
     <div class="gameMeta">
       <div id="turnBadge">أولوية اختيار الحرف: --</div>
       <div id="timerLabel">مدة الجولة: <span id="timerDurationLabel">30</span> ثانية</div>
@@ -140,6 +122,7 @@
         <div id="timerFill"></div>
       </div>
       <div class="timerActions">
+        <button id="startTimerBtn" class="controlBtn green">بدء المؤقت</button>
         <button id="pauseTimerBtn" class="controlBtn blue">إيقاف المؤقت</button>
         <button id="resetTimerBtn" class="controlBtn red">إعادة المؤقت</button>
       </div>

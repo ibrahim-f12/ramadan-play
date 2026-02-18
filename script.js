@@ -15,20 +15,14 @@ const LETTER_SOURCE_MAP = {
   "ا": "أ",
   "ه": "هـ"
 };
-const QUESTION_CATEGORY_TOKENS = {
-  religious: ["اسلامي", "ديني", "قراني", "فقهي", "عقائدي", "غيبي"],
-  geography: ["جغرافي", "سياحي", "بحري", "فلكي", "فلك", "جيولوجي", "بيئي", "جوي", "ملاحة", "فضائي"],
-  sports: ["رياضي", "رياضيات", "فنون قتاليه"],
-  puzzles: ["الغاز"],
-  proverbs: ["امثال", "لغوي", "ادبي"]
-};
+
 const encodedEditTag = "RWRpdCBCeSBUeWxlci1UZWxncmFtLEBsMmwybDJs";
 
 try {
   const decodedEditTag = atob(encodedEditTag);
   console.info(decodedEditTag);
 } catch (error) {
-  // ignore decode errors in unsupported environments
+//
 }
 
 let team1Color = COLORS[0];
@@ -45,12 +39,11 @@ let currentTimer = null;
 let timerRemaining = 30;
 let timerDuration = 30;
 let isTimerRunning = false;
+let hasTimerStarted = false;
 
 let deleteMode = null;
 const letterQuestionsCache = {};
 
-let validationMode = "easy";
-let questionCategory = "cocktail";
 let startMode = "letters";
 
 let currentTurn = null;
@@ -74,6 +67,7 @@ const questionBar = document.getElementById("questionBar");
 const timerText = document.getElementById("timerText");
 const timerFill = document.getElementById("timerFill");
 const timerDurationLabel = document.getElementById("timerDurationLabel");
+const startTimerBtn = document.getElementById("startTimerBtn");
 const pauseTimerBtn = document.getElementById("pauseTimerBtn");
 const resetTimerBtn = document.getElementById("resetTimerBtn");
 const turnBadge = document.getElementById("turnBadge");
@@ -144,14 +138,21 @@ function updateTurnUI() {
 
 function updateTimerDurationUI() {
   timerDurationLabel.textContent = String(timerDuration);
-  timerRemaining = timerDuration;
-  resetTimerVisual();
+  resetTimerState();
 }
 
 function resetTimerVisual() {
   timerText.textContent = String(timerRemaining);
   const width = timerDuration > 0 ? (timerRemaining / timerDuration) * 100 : 0;
   timerFill.style.width = `${Math.max(0, width)}%`;
+}
+
+function resetTimerState() {
+  stopTimer();
+  timerRemaining = timerDuration;
+  hasTimerStarted = false;
+  resetTimerVisual();
+  pauseTimerBtn.textContent = "إيقاف المؤقت";
 }
 
 function stopTimer() {
@@ -167,6 +168,7 @@ function runTimerFromCurrent() {
 
   pauseTimerBtn.textContent = "إيقاف المؤقت";
   isTimerRunning = true;
+  hasTimerStarted = true;
   currentTimer = setInterval(() => {
     timerRemaining -= 1;
     resetTimerVisual();
@@ -178,9 +180,20 @@ function runTimerFromCurrent() {
 }
 
 function startRoundTimer() {
-  timerRemaining = timerDuration;
-  resetTimerVisual();
+  if (!selectedHex || !currentQuestionData) {
+    alert("لا يوجد سؤال نشط لبدء المؤقت");
+    return;
+  }
+
+  if (isTimerRunning) return;
+
+  if (!hasTimerStarted || timerRemaining <= 0) {
+    timerRemaining = timerDuration;
+    resetTimerVisual();
+  }
+
   runTimerFromCurrent();
+  questionBar.textContent = `الحرف: ${currentLetter} - ${currentQuestionData.question}`;
 }
 
 function onTimeEnded() {
@@ -209,23 +222,22 @@ function pauseOrResumeTimer() {
     return;
   }
 
+  if (!hasTimerStarted) {
+    alert("اضغط زر بدء المؤقت أولًا.");
+    return;
+  }
+
   if (timerRemaining <= 0) {
     alert("انتهى وقت السؤال. اضغط إعادة المؤقت أو غيّر السؤال.");
     return;
   }
 
   runTimerFromCurrent();
+  questionBar.textContent = `الحرف: ${currentLetter} - ${currentQuestionData.question}`;
 }
 
 function resetRoundTimer() {
-  stopTimer();
-  timerRemaining = timerDuration;
-  resetTimerVisual();
-  pauseTimerBtn.textContent = "إيقاف المؤقت";
-
-  if (selectedHex && currentQuestionData) {
-    runTimerFromCurrent();
-  }
+  resetTimerState();
 }
 
 function mapLetterForSource(letter) {
@@ -292,46 +304,9 @@ function normalizeArabicForMatch(text) {
     .replace(/أ|إ|آ/g, "ا");
 }
 
-function matchesQuestionCategory(item, selectedCategory) {
-  if (selectedCategory === "cocktail") return true;
-
-  const tokens = QUESTION_CATEGORY_TOKENS[selectedCategory] || [];
-  if (tokens.length === 0) return true;
-
-  const rawIds = Array.isArray(item.id)
-    ? item.id
-    : (typeof item.id === "string" ? [item.id] : []);
-
-  const normalizedIds = rawIds
-    .map((value) => normalizeArabicForMatch(String(value)))
-    .filter(Boolean);
-
-  if (normalizedIds.length === 0) return false;
-  return normalizedIds.some((tag) => tokens.some((token) => tag.includes(token)));
-}
-
-function getFilteredQuestions(questions, selectedCategory) {
-  if (!Array.isArray(questions) || questions.length === 0) return [];
-  if (selectedCategory === "cocktail") return questions;
-  return questions.filter((item) => matchesQuestionCategory(item, selectedCategory));
-}
-
-function getSelectedCategoryLabel() {
-  const labels = {
-    religious: "دينية",
-    geography: "جغرافية",
-    sports: "رياضية",
-    puzzles: "ألغاز",
-    proverbs: "أمثال",
-    cocktail: "كوكتيل"
-  };
-  return labels[questionCategory] || "كوكتيل";
-}
-
 async function getQuestionFromFallah(letter, excludeQuestionText = "") {
   const questions = await loadQuestionsByLetter(letter);
-  const filteredQuestions = getFilteredQuestions(questions, questionCategory);
-  return pickRandomQuestion(filteredQuestions, excludeQuestionText);
+  return pickRandomQuestion(questions, excludeQuestionText);
 }
 
 function normalizeAnswerForComparison(text) {
@@ -493,8 +468,8 @@ async function onHexClick(hex) {
   }
 
   currentQuestionData = questionData;
-  questionBar.textContent = `الحرف: ${currentLetter} - ${questionData.question}`;
-  startRoundTimer();
+  questionBar.textContent = `الحرف: ${currentLetter} - ${questionData.question} (اضغط زر "بدء المؤقت")`;
+  resetTimerState();
 }
 
 function checkPath(team) {
@@ -581,19 +556,26 @@ function verifyAnswer(team) {
 
   const inputElement = team === "team1" ? answerTeam1 : answerTeam2;
   const input = inputElement.value.trim();
+  const activeQuestionText = `الحرف: ${currentLetter} - ${currentQuestionData.question}`;
 
-  if (!isValidWord(input, currentLetter)) {
+  function showWrongAnswer(message) {
     showResultIcon(false);
-    questionBar.textContent = "إجابة غير صحيحة - الكلمة لا تبدأ بالحرف المطلوب";
+    questionBar.textContent = `${message}. ${activeQuestionText}`;
+  }
+
+  if (!input) {
+    showWrongAnswer("الرجاء إدخال الإجابة، الخانة فارغة");
     return;
   }
 
-  const isAnswerMatched = matchesExpectedAnswer(input, currentQuestionData.answer, validationMode);
+  if (!isValidWord(input, currentLetter)) {
+    showWrongAnswer("إجابة غير صحيحة - الكلمة لا تبدأ بالحرف المطلوب");
+    return;
+  }
+
+  const isAnswerMatched = matchesExpectedAnswer(input, currentQuestionData.answer, "easy");
   if (!isAnswerMatched) {
-    showResultIcon(false);
-    questionBar.textContent = validationMode === "strict"
-      ? "إجابة غير صحيحة (صارم) - يجب مطابقة الإجابة المعتمدة"
-      : "إجابة غير صحيحة لهذا السؤال";
+    showWrongAnswer("إجابة غير صحيحة لهذا السؤال");
     return;
   }
 
@@ -604,7 +586,6 @@ function verifyAnswer(team) {
   boardState[row][col] = team;
 
   showResultIcon(true);
-  stopTimer();
 
   answerTeam1.value = "";
   answerTeam2.value = "";
@@ -618,9 +599,7 @@ function verifyAnswer(team) {
   currentTurn = team;
   updateTurnUI();
 
-  timerRemaining = timerDuration;
-  resetTimerVisual();
-  pauseTimerBtn.textContent = "إيقاف المؤقت";
+  resetTimerState();
 
   questionBar.textContent = `إجابة صحيحة لـ ${getTeamTitle(team)}. اختاروا الحرف التالي.`;
 }
@@ -928,9 +907,7 @@ function startGame() {
   if (gameFooter) gameFooter.style.display = "block";
   gameStarted = true;
 
-  timerRemaining = timerDuration;
-  resetTimerVisual();
-  pauseTimerBtn.textContent = "إيقاف المؤقت";
+  resetTimerState();
 
   if (startMode === "letters") {
     questionBar.textContent = `تم اختيار ${getTeamTitle(currentTurn)} عشوائيًا ليبدأ بحرف ${openingLetter}.`;
@@ -965,8 +942,8 @@ async function changeQuestion() {
   }
 
   currentQuestionData = nextQuestion;
-  questionBar.textContent = `الحرف: ${currentLetter} - ${nextQuestion.question}`;
-  startRoundTimer();
+  questionBar.textContent = `الحرف: ${currentLetter} - ${nextQuestion.question} (اضغط زر "بدء المؤقت")`;
+  resetTimerState();
 }
 
 function setupEvents() {
@@ -982,6 +959,7 @@ function setupEvents() {
   startGameBtn.addEventListener("click", startGame);
 
   document.getElementById("changeQuestionBtn").addEventListener("click", changeQuestion);
+  startTimerBtn.addEventListener("click", startRoundTimer);
   pauseTimerBtn.addEventListener("click", pauseOrResumeTimer);
   resetTimerBtn.addEventListener("click", resetRoundTimer);
 
@@ -1003,14 +981,6 @@ function setupEvents() {
 }
 
 function initChoices() {
-  buildChoiceGroup("difficultyChoices", (value) => {
-    validationMode = value === "strict" ? "strict" : "easy";
-  });
-
-  buildChoiceGroup("categoryChoices", (value) => {
-    questionCategory = value || "cocktail";
-  });
-
   buildChoiceGroup("timerChoices", (value) => {
     const parsed = Number(value);
     timerDuration = Number.isFinite(parsed) && parsed > 0 ? parsed : 30;
@@ -1048,8 +1018,7 @@ function init() {
   setupHelpButtons();
   setupEvents();
 
-  timerRemaining = timerDuration;
-  resetTimerVisual();
+  resetTimerState();
   updateTurnUI();
 }
 
