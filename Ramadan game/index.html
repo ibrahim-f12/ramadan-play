@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حروف رمضان</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="homeScreen">
+    <div class="stars"></div>
+    <h1 class="mainTitle">حروف رمضان 🌙</h1>
+
+    <section id="setupPage1" class="setupPage active">
+      <div class="teamSetup">
+        <div class="setupBox" id="setupTeam1">
+          <h2>الفريق الأول</h2>
+          <input id="team1NameInput" placeholder="اسم الفريق" />
+          <div class="colorGrid" id="team1Colors"></div>
+        </div>
+
+        <div class="setupBox" id="setupTeam2">
+          <h2>الفريق الثاني</h2>
+          <input id="team2NameInput" placeholder="اسم الفريق" />
+          <div class="colorGrid" id="team2Colors"></div>
+        </div>
+      </div>
+
+      <div class="rulesPanel">
+        <article class="ruleCard">
+          <h3 class="ruleTitle">تعليمات اللعبة</h3>
+          <p class="ruleBody">
+            كل فريق يختار اسمًا ولونًا مختلفًا. بعد الإعداد يتم اختيار مستوى الصعوبة وتصنيف الأسئلة، ثم بداية اللعب تكون إما باختيار كل فريق لحرفه مع اختيار فريق البداية عشوائيًا، أو بقرعة حرف بداية عشوائي. يظهر السؤال بعد اختيار الحرف، ويجب أن تبدأ الإجابة بنفس الحرف المختار. الفريق الذي يجيب صحيحًا يأخذ أولوية اختيار الحرف التالي.
+          </p>
+        </article>
+
+        <article class="ruleCard">
+          <h3 class="ruleTitle">المساعدات</h3>
+          <p class="ruleBody">
+            لكل فريق مساعدتان تستخدم مرة واحدة لكل مساعدة: حذف خلية من خلايا الفريق المنافس، واتصال بصديق للحصول على تلميح.
+          </p>
+        </article>
+
+        <article class="ruleCard">
+          <h3 class="ruleTitle">طريقة الفوز</h3>
+          <p class="ruleBody">
+            أول فريق يصل بخط لونه إلى الجهة المقابلة له يفوز بالمباراة.
+          </p>
+        </article>
+      </div>
+
+      <button id="goToOptionsBtn" class="startBtn">التالي: إعدادات اللعب</button>
+    </section>
+
+    <section id="setupPage2" class="setupPage">
+      <h2 class="setupSubTitle">إعدادات الجولة</h2>
+
+
+      <div class="settingsGrid">
+
+        <div class="settingCard">
+          <h3>مدة المؤقت</h3>
+          <div class="choiceGroup" id="timerChoices">
+            <button class="choiceBtn" data-value="15">15 ثانية</button>
+            <button class="choiceBtn" data-value="20">20 ثانية</button>
+            <button class="choiceBtn selectedChoice" data-value="30">30 ثانية</button>
+            <button class="choiceBtn" data-value="45">45 ثانية</button>
+            <button class="choiceBtn" data-value="60">60 ثانية</button>
+          </div>
+        </div>
+          <div class="settingCard startModeCard">
+            <h3>بداية اللعب</h3>
+            <div class="choiceGroup" id="startModeChoices">
+              <button class="choiceBtn" data-value="lottery">قرعة حرف البداية</button>
+              <button class="choiceBtn selectedChoice" data-value="letters">كل فريق يختار حرفًا</button>
+            </div>
+            <p id="startModeHint" class="choiceHint">كل فريق يختار حرفًا، ثم يتم اختيار فريق البداية عشوائيًا ويبدأ بحرفه.</p>
+         </div>
+      </div>
+      
+
+
+      <div id="lettersStartBox" class="lettersStartBox">
+        <div class="teamLetterPicker">
+          <h4 id="team1StartLabel">حرف بداية الفريق الأول</h4>
+          <div class="letterChoices" id="team1StartLetters"></div>
+        </div>
+
+        <div class="teamLetterPicker">
+          <h4 id="team2StartLabel">حرف بداية الفريق الثاني</h4>
+          <div class="letterChoices" id="team2StartLetters"></div>
+        </div>
+      </div>
+
+      <div class="setupActions">
+        <button id="backToTeamsBtn" class="controlBtn blue">رجوع</button>
+        <button id="startGameBtn" class="startBtn">ابدأ اللعبة</button>
+      </div>
+    </section>
+
+    <footer>
+      جميع الحقوق محفوظة © <span>Ibrahim Mohammad</span> 2026
+    </footer>
+  </div>
+
+  <div id="resultIcon"></div>
+
+  <div id="gameScreen">
+    <h1>حروف🌙 رمضان </h1>
+    <div class="gameMeta">
+      <div id="turnBadge">أولوية اختيار الحرف: --</div>
+      <div id="timerLabel">مدة الجولة: <span id="timerDurationLabel">30</span> ثانية</div>
+      <button id="changeQuestionBtn" class="controlBtn cyan">تبديل السؤال</button>
+    </div>
+
+    <div id="questionBar">اختر خلية لبدء السؤال</div>
+
+    <div class="timerBox">
+      <div class="timerText" id="timerText">30</div>
+      <div class="timerBar">
+        <div id="timerFill"></div>
+      </div>
+      <div class="timerActions">
+        <button id="startTimerBtn" class="controlBtn green">بدء المؤقت</button>
+        <button id="pauseTimerBtn" class="controlBtn blue">إيقاف المؤقت</button>
+        <button id="resetTimerBtn" class="controlBtn red">إعادة المؤقت</button>
+      </div>
+    </div>
+
+    <div class="gameArea">
+      <div class="boardWrapper">
+        <div id="topEdge"></div>
+        <div class="middleArea">
+          <div id="leftEdge"></div>
+          <div id="grid"></div>
+          <div id="rightEdge"></div>
+        </div>
+        <div id="bottomEdge"></div>
+      </div>
+
+      <div class="answersArea">
+        <div class="teamBox" id="team1Box">
+          <h2 id="team1Title">الفريق الأول</h2>
+          <input id="answerTeam1" placeholder="إجابة الفريق الأول" />
+          <button class="verifyBtn" data-team="team1">تحقق من الإجابة</button>
+          <div class="helps" id="helpsTeam1">
+            <button type="button" class="helpBtn" data-help="call" title="اتصال بصديق">📞 اتصال بصديق</button>
+            <button type="button" class="helpBtn" data-help="delete" title="حذف خلية المنافس">❌ حذف خلية</button>
+          </div>
+        </div>
+
+        <div class="teamBox" id="team2Box">
+          <h2 id="team2Title">الفريق الثاني</h2>
+          <input id="answerTeam2" placeholder="إجابة الفريق الثاني" />
+          <button class="verifyBtn" data-team="team2">تحقق من الإجابة</button>
+          <div class="helps" id="helpsTeam2">
+            <button type="button" class="helpBtn" data-help="call" title="اتصال بصديق">📞 اتصال بصديق</button>
+            <button type="button" class="helpBtn" data-help="delete" title="حذف خلية المنافس">❌ حذف خلية</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="winScreen">
+    <canvas id="confettiCanvas"></canvas>
+    <div class="winBox">
+      <h1 id="winTitle">🏆 فاز الفريق</h1>
+      <button id="restartBtn">إعادة اللعب</button>
+    </div>
+  </div>
+
+  <footer class="gameFooter">
+    جميع الحقوق محفوظة © <span>Ibrahim Mohammad</span> 2026
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
